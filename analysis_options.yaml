@@ -1,0 +1,13 @@
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    avoid_print: true
+    cancel_subscriptions: true
+    close_sinks: true
+    directives_ordering: true
+    unawaited_futures: true

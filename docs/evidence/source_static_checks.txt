@@ -1,0 +1,59 @@
+ASCEND source-only verification evidence
+Snapshot date: 2026-11-05 (Asia/Kolkata)
+
+Source checks performed in the previous audit session:
+- Python parsed Android app XML with `xml.etree.ElementTree` and parsed `pubspec.yaml`.
+- Scanned Dart imports/local paths, manifest permission-removal directives, no-op logger source, atomic onboarding call, and bundled model hash.
+- Recorded output: `OK: Android XML parse; pubspec YAML and local package imports; model hash; manifest permission-removal directives; no-op telemetry logger source; atomic onboarding call.`
+- Recorded counts at that time: 24 Dart source files, 5 Dart test files, 1 native unit test source.
+- This was source inspection only; no Dart/Gradle build or test was run.
+
+Tool availability rechecked 2026-11-05:
+
+Command: `java -version`
+Actual output:
+```text
+openjdk version "11" 2018-09-25
+OpenJDK Runtime Environment 18.9 (build 11+28)
+OpenJDK 64-Bit Server VM 18.9 (build 11+28, mixed mode)
+```
+
+Command: `for x in flutter dart gradle adb sdkmanager; do command -v "$x" || echo "$x: absent"; done; test -f pubspec.lock && echo 'pubspec.lock: present' || echo 'pubspec.lock: absent'`
+Actual output:
+```text
+flutter: absent
+dart: absent
+gradle: absent
+adb: absent
+sdkmanager: absent
+pubspec.lock: absent
+```
+
+`ANDROID_HOME`, `ANDROID_SDK_ROOT`, and `FLUTTER_ROOT` were not present in the preceding environment probe. No emulator/device is available in this workspace.
+
+Bundled model checksum previously recorded:
+```text
+64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff  assets/models/face_landmarker_v1.task
+```
+
+Additional source/document checks executed 2026-11-05 after adding the readiness documents and integration-test source:
+
+Environment versions for that check: Python 3.13.16; PyYAML 6.0.3.
+
+Command: Python `yaml.safe_load` for `pubspec.yaml`; `xml.etree.ElementTree.parse` for every XML under `android/app/src/main`; SHA-256 of model; existence/size check for the five requested readiness documents, this evidence file, and `integration_test/app_flow_test.dart`.
+Actual output:
+```text
+pubspec YAML parse: OK
+Android XML parse: OK (8 files)
+Model SHA-256: 64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff
+docs/PRODUCTION_READINESS.md present
+docs/DEVICE_TESTING.md present
+docs/SECURITY_PRIVACY_AUDIT.md present
+docs/RELEASE_CHECKLIST.md present
+docs/EXTERNAL_CONFIGURATION.md present
+docs/evidence/source_static_checks.txt present
+integration_test/app_flow_test.dart present
+```
+Environment scan found none of `ANDROID_HOME`, `ANDROID_SDK_ROOT`, `FLUTTER_ROOT`, `JAVA_HOME` set. These checks validate YAML/XML parseability and file presence only; they do not validate Flutter, Dart, Gradle, test syntax or application behavior.
+
+Not performed: `flutter pub get`, `dart format`, `flutter analyze`, `flutter test`, `flutter test integration_test/app_flow_test.dart`, Gradle tasks/builds, APK/AAB inspection, device/purchase/network/legal tests.
